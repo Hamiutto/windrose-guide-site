@@ -1,0 +1,108 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import GuideCard from '../../components/GuideCard.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const categories = ['beginner', 'survival', 'ships', 'multiplayer', 'settings', 'resources'];
+  return categories.map(cat => ({ params: { category: cat } }));
+}
+
+const { category } = Astro.params;
+
+const categoryMeta: Record<string, { label: string; description: string; icon: string; intro: string }> = {
+  beginner:    {
+    label: 'Beginner Guides',
+    description: 'Complete beginner guides for Windrose. Learn controls, your first ship, survival basics, and how to get started fast.',
+    icon: '🧭',
+    intro: 'New to Windrose? These guides will take you from your first spawn to a confident captain.',
+  },
+  ships:       {
+    label: 'Ship Guides',
+    description: 'Best ship builds, comparisons, and upgrade guides for Windrose. Find the right vessel for solo, duo, or crew play.',
+    icon: '⛵',
+    intro: 'Choose the right ship and outfit it for success. From the starter Sloop to the mighty Galleon.',
+  },
+  survival:    {
+    label: 'Survival Tips',
+    description: 'Windrose survival guides covering storms, sea monsters, food, repairs, and staying alive at sea.',
+    icon: '🛟',
+    intro: 'The ocean is unforgiving. These survival guides will keep your ship afloat and your crew alive.',
+  },
+  multiplayer: {
+    label: 'Multiplayer Guides',
+    description: 'How to play Windrose with friends, crew roles, PvP tips, and co-op strategies.',
+    icon: '🤝',
+    intro: 'Everything you need to build a great crew, dominate PvP, and conquer the seas together.',
+  },
+  settings:    {
+    label: 'Settings & FPS',
+    description: 'Best Windrose graphics settings to boost FPS, reduce lag, and get the most out of your PC.',
+    icon: '⚙️',
+    intro: 'Max your FPS and minimize input lag with our tested settings guides for all PC tiers.',
+  },
+  resources:   {
+    label: 'Resources & Crafting',
+    description: 'Windrose resource farming, crafting recipes, trading routes, and economy guides.',
+    icon: '⚒️',
+    intro: 'Know what to farm, how to craft, and where to sell. Master the Windrose economy.',
+  },
+};
+
+const meta = categoryMeta[category as string] ?? {
+  label: category,
+  description: `${category} guides for Windrose.`,
+  icon: '📖',
+  intro: '',
+};
+
+const allGuides = await getCollection('guides');
+const guides = allGuides.filter(g => g.data.category === category);
+---
+
+<BaseLayout
+  title={`${meta.label} – Windrose Guides`}
+  description={meta.description}
+>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <Breadcrumb crumbs={[{ label: meta.label }]} />
+
+    <header class="mb-10">
+      <div class="flex items-center gap-4 mb-4">
+        <div class="w-14 h-14 rounded-2xl bg-brand-500/10 border border-brand-500/20 flex items-center justify-center text-3xl">
+          {meta.icon}
+        </div>
+        <div>
+          <h1 class="font-display font-800 text-3xl md:text-4xl text-white">{meta.label}</h1>
+          <p class="text-slate-500 text-sm mt-1">{guides.length} guide{guides.length !== 1 ? 's' : ''}</p>
+        </div>
+      </div>
+      <p class="text-slate-400 text-lg max-w-2xl">{meta.intro}</p>
+    </header>
+
+    {guides.length > 0 ? (
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {guides.map(guide => (
+          <GuideCard
+            title={guide.data.title}
+            description={guide.data.description}
+            href={`/guides/${guide.slug}`}
+            category={guide.data.category}
+            readTime={guide.data.readTime}
+          />
+        ))}
+      </div>
+    ) : (
+      <div class="text-center py-20">
+        <p class="text-slate-500 text-lg">No guides yet in this category.</p>
+        <p class="text-slate-600 text-sm mt-2">Check back soon — we're adding new guides regularly.</p>
+      </div>
+    )}
+
+    <!-- All categories link -->
+    <div class="mt-12 pt-8 border-t border-surface-700">
+      <a href="/" class="btn-ghost border border-surface-600">← Back to All Guides</a>
+    </div>
+  </div>
+</BaseLayout>

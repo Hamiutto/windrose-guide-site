@@ -1,0 +1,84 @@
+---
+const navLinks = [
+  { href: '/category/beginner', label: 'Beginner' },
+  { href: '/category/ships', label: 'Ships' },
+  { href: '/category/survival', label: 'Survival' },
+  { href: '/category/multiplayer', label: 'Multiplayer' },
+  { href: '/category/settings', label: 'Settings' },
+  { href: '/category/resources', label: 'Resources' },
+];
+
+const currentPath = Astro.url.pathname;
+---
+
+<header class="sticky top-0 z-50 bg-surface-900/95 backdrop-blur border-b border-surface-700">
+  <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <!-- Logo -->
+      <a href="/" class="flex items-center gap-2.5 group" aria-label="Windrose Guides home">
+        <div class="w-8 h-8 rounded-lg bg-brand-500 flex items-center justify-center flex-shrink-0 group-hover:bg-brand-400 transition-colors">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L19 9L12 11L5 9L12 2Z" fill="white" opacity="0.9"/>
+            <path d="M12 11L19 9L22 22L12 18L2 22L5 9L12 11Z" fill="white"/>
+          </svg>
+        </div>
+        <span class="font-display font-700 text-white text-lg leading-none">
+          Windrose<span class="text-brand-400">Guides</span>
+        </span>
+      </a>
+
+      <!-- Desktop Nav -->
+      <div class="hidden md:flex items-center gap-1">
+        {navLinks.map(link => (
+          <a
+            href={link.href}
+            class={`px-3 py-1.5 rounded-md text-sm font-display font-500 transition-colors ${
+              currentPath.startsWith(link.href)
+                ? 'text-white bg-surface-700'
+                : 'text-slate-400 hover:text-white hover:bg-surface-700'
+            }`}
+          >
+            {link.label}
+          </a>
+        ))}
+      </div>
+
+      <!-- Right -->
+      <div class="flex items-center gap-3">
+        <a href="/faq" class="hidden sm:inline-flex btn-ghost text-xs">FAQ</a>
+        <a href="/guides/beginner-guide" class="btn-primary text-xs">
+          Start Here →
+        </a>
+        <!-- Mobile hamburger -->
+        <button id="mobile-menu-btn" class="md:hidden p-2 text-slate-400 hover:text-white" aria-label="Open menu">
+          <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+            <path fill-rule="evenodd" d="M3 6h18v2H3V6zm0 5h18v2H3v-2zm0 5h18v2H3v-2z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden pb-4 border-t border-surface-700 mt-1 pt-3">
+      <div class="grid grid-cols-2 gap-1">
+        {navLinks.map(link => (
+          <a
+            href={link.href}
+            class="px-3 py-2.5 rounded-lg text-sm font-display text-slate-300 hover:text-white hover:bg-surface-700 transition-colors"
+          >
+            {link.label}
+          </a>
+        ))}
+        <a href="/faq" class="px-3 py-2.5 rounded-lg text-sm font-display text-slate-300 hover:text-white hover:bg-surface-700 transition-colors col-span-2">
+          FAQ
+        </a>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<script>
+  const btn = document.getElementById('mobile-menu-btn');
+  const menu = document.getElementById('mobile-menu');
+  btn?.addEventListener('click', () => menu?.classList.toggle('hidden'));
+</script>

@@ -1,0 +1,98 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+
+const faqs = [
+  {
+    section: 'General',
+    questions: [
+      { q: 'What is Windrose?', a: 'Windrose is a naval exploration and survival game. You captain your own ship, sail a procedural ocean, gather resources, fight enemies, and explore uncharted islands — solo or with a crew.' },
+      { q: 'Is Windrose multiplayer or solo?', a: 'Both! Windrose supports 1–6 players per ship. You can play the full game solo, or crew up with friends for larger ships and harder content.' },
+      { q: 'What platforms is Windrose available on?', a: 'Windrose is available on PC (Windows). Console support has not been officially announced.' },
+      { q: 'Is Windrose free to play?', a: 'Windrose is a paid game. Check the official store page for current pricing, discounts, and demo availability.' },
+    ]
+  },
+  {
+    section: 'Beginner Questions',
+    questions: [
+      { q: 'How do I get started in Windrose?', a: 'You spawn on a starting island with a basic Skiff. Gather wood, craft basic tools, repair your Skiff, then save up to build your first proper ship (the Sloop). Read our Beginner Guide for a full walkthrough.' },
+      { q: 'What is the best starter ship?', a: 'The Sloop is universally recommended for beginners. It\'s fast, manageable solo, has 2 cannon ports, and decent cargo space. Don\'t stay on the Skiff — upgrade as soon as possible.' },
+      { q: 'How do I save in Windrose?', a: 'Windrose saves automatically when you anchor at a Port or major island. There is no manual save button.' },
+      { q: 'Can I lose my ship permanently?', a: 'Yes — if your ship sinks in open water and you can\'t retrieve it, it is lost. Always carry repair kits. Some servers have "soft death" rules that let you recover your ship.' },
+    ]
+  },
+  {
+    section: 'Ships & Builds',
+    questions: [
+      { q: 'What ships are available in Windrose?', a: 'Windrose has several ship classes: Skiff (starter), Sloop (2-man), Brigantine (4-man), Galleon (6-man), and special ships unlocked through late-game content.' },
+      { q: 'How do I build a new ship?', a: 'Gather the required materials (Wood Planks, Rope, Iron) then visit a Shipwright NPC at any Port island. Select your ship type and confirm. Ships take 1–3 in-game days to build.' },
+      { q: 'What is the best late-game ship?', a: 'The Galleon is the largest and most powerful ship, but requires a crew of 4–6 to operate effectively. For solo play, a well-upgraded Sloop remains highly competitive.' },
+    ]
+  },
+  {
+    section: 'Performance & Settings',
+    questions: [
+      { q: 'How do I boost FPS in Windrose?', a: 'Turn off Motion Blur, V-Sync, Ambient Occlusion, and Film Grain. Lower Shadow Quality and Water Detail. These changes give the biggest FPS gains on mid-range PCs.' },
+      { q: 'What are the minimum PC specs for Windrose?', a: 'Minimum: Intel Core i5-8400, GTX 1060 6GB, 8GB RAM, 20GB storage. Recommended: i7-10700K, RTX 2070, 16GB RAM.' },
+      { q: 'Windrose keeps crashing. How do I fix it?', a: 'Common fixes: update GPU drivers, verify game files via the launcher, reduce graphics settings, disable overlays (Discord, Steam), and make sure Windows is up to date.' },
+    ]
+  },
+];
+
+const allQuestions = faqs.flatMap(s => s.questions);
+---
+
+<BaseLayout
+  title="Windrose FAQ – Frequently Asked Questions"
+  description="Answers to the most common Windrose questions. Beginner tips, ship info, settings help, multiplayer guides, and more."
+>
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": allQuestions.map(q => ({
+      "@type": "Question",
+      "name": q.q,
+      "acceptedAnswer": { "@type": "Answer", "text": q.a }
+    }))
+  })} slot="head" />
+
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <Breadcrumb crumbs={[{ label: 'FAQ' }]} />
+
+    <header class="mb-12">
+      <h1 class="font-display font-800 text-4xl text-white mb-4">Windrose FAQ</h1>
+      <p class="text-slate-400 text-lg">Common questions from the Windrose community, answered.</p>
+    </header>
+
+    <div class="space-y-12">
+      {faqs.map(section => (
+        <section>
+          <h2 class="font-display font-700 text-lg text-brand-400 uppercase tracking-wider mb-5 pb-3 border-b border-surface-700">
+            {section.section}
+          </h2>
+          <div class="space-y-4">
+            {section.questions.map(item => (
+              <details class="group bg-surface-800 border border-surface-600 rounded-xl overflow-hidden">
+                <summary class="flex items-center justify-between p-5 cursor-pointer list-none hover:bg-surface-700 transition-colors">
+                  <h3 class="font-display font-600 text-white text-sm pr-8">{item.q}</h3>
+                  <svg class="w-4 h-4 text-slate-500 flex-shrink-0 group-open:rotate-180 transition-transform" viewBox="0 0 24 24" fill="none">
+                    <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  </svg>
+                </summary>
+                <div class="px-5 pb-5 text-slate-400 text-sm leading-relaxed border-t border-surface-700 pt-4">
+                  {item.a}
+                </div>
+              </details>
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+
+    <div class="mt-12 p-6 bg-surface-800 border border-surface-600 rounded-xl text-center">
+      <p class="text-slate-300 font-display font-600 mb-2">Can't find your answer?</p>
+      <p class="text-slate-500 text-sm mb-4">Check our full guide library for detailed walkthroughs.</p>
+      <a href="/" class="btn-primary">Browse All Guides</a>
+    </div>
+  </div>
+</BaseLayout>

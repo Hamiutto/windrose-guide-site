@@ -1,0 +1,164 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import GuideCard from '../components/GuideCard.astro';
+import { getCollection } from 'astro:content';
+
+const allGuides = await getCollection('guides');
+const featuredGuides = allGuides.filter(g => g.data.featured).slice(0, 4);
+const latestGuides = allGuides
+  .sort((a, b) => new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime())
+  .slice(0, 6);
+
+const categories = [
+  { slug: 'beginner',    label: 'Beginner Guides',   desc: 'New to Windrose? Start here.',          icon: '🧭', color: 'emerald' },
+  { slug: 'ships',       label: 'Ship Guides',        desc: 'Best builds and ship comparisons.',     icon: '⛵', color: 'blue'    },
+  { slug: 'survival',    label: 'Survival Tips',      desc: 'Stay alive and thrive at sea.',         icon: '🛟', color: 'amber'   },
+  { slug: 'multiplayer', label: 'Multiplayer',        desc: 'Co-op crew guides and PvP tips.',       icon: '🤝', color: 'purple'  },
+  { slug: 'settings',    label: 'Settings & FPS',     desc: 'Max performance on any PC.',            icon: '⚙️', color: 'rose'    },
+  { slug: 'resources',   label: 'Resources',          desc: 'Crafting, farming, and economy.',       icon: '⚒️', color: 'teal'    },
+];
+
+const colorMap: Record<string, { card: string; icon: string; badge: string }> = {
+  emerald: { card: 'hover:border-emerald-500/30', icon: 'bg-emerald-500/10 text-emerald-400', badge: 'text-emerald-400' },
+  blue:    { card: 'hover:border-blue-500/30',    icon: 'bg-blue-500/10 text-blue-400',       badge: 'text-blue-400'    },
+  amber:   { card: 'hover:border-amber-500/30',   icon: 'bg-amber-500/10 text-amber-400',     badge: 'text-amber-400'   },
+  purple:  { card: 'hover:border-purple-500/30',  icon: 'bg-purple-500/10 text-purple-400',   badge: 'text-purple-400'  },
+  rose:    { card: 'hover:border-rose-500/30',    icon: 'bg-rose-500/10 text-rose-400',       badge: 'text-rose-400'    },
+  teal:    { card: 'hover:border-teal-500/30',    icon: 'bg-teal-500/10 text-teal-400',       badge: 'text-teal-400'    },
+};
+
+const faqs = [
+  { q: 'What is Windrose?', a: 'Windrose is a naval exploration and survival game where you sail, fight, and explore a procedural ocean world.' },
+  { q: 'Is Windrose free to play?', a: 'Windrose is available on PC. Check the official store page for current pricing and sales.' },
+  { q: 'Can I play Windrose solo?', a: 'Yes! Windrose is fully playable solo. Most content is designed for 1–4 players.' },
+  { q: 'What is the best starter ship?', a: 'The Sloop is the best ship for beginners — fast, easy to manage solo, and capable in combat.' },
+  { q: 'How do I boost FPS in Windrose?', a: 'Disable Motion Blur, V-Sync, and Ambient Occlusion. Reduce Shadow Quality and Water Detail for the biggest FPS gains.' },
+];
+---
+
+<BaseLayout
+  title="Windrose Guides & Wiki – Beginner Guides, Ship Builds, Tips 2024"
+  description="The most complete Windrose guide hub. Beginner walkthroughs, best starter ships, survival tips, multiplayer guides, FPS boost settings, and more."
+>
+  <!-- ===== HERO ===== -->
+  <section class="relative overflow-hidden">
+    <!-- Background glow -->
+    <div class="absolute inset-0 bg-gradient-to-br from-brand-900/20 via-surface-900 to-surface-900 pointer-events-none"></div>
+    <div class="absolute top-0 left-1/4 w-96 h-96 bg-brand-500/5 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
+      <div class="max-w-3xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 text-xs font-display font-600 uppercase tracking-wider mb-6">
+          ⚓ Community Guide Hub
+        </div>
+        <h1 class="font-display font-800 text-4xl md:text-5xl lg:text-6xl text-white leading-tight mb-6">
+          Windrose<br />
+          <span class="text-brand-400">Guides & Wiki</span>
+        </h1>
+        <p class="text-slate-400 text-lg md:text-xl leading-relaxed mb-8 max-w-2xl">
+          Beginner guides, ship builds, survival tips, multiplayer help, and more. Everything you need to master the seas.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <a href="/guides/beginner-guide" class="btn-primary">
+            Start Here – Beginner Guide
+          </a>
+          <a href="/category/ships" class="btn-ghost border border-surface-600">
+            Ship Builds →
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+    <!-- ===== FEATURED GUIDES ===== -->
+    <section class="py-14" aria-labelledby="featured-heading">
+      <div class="flex items-center justify-between mb-8">
+        <h2 id="featured-heading" class="section-title">⭐ Featured Guides</h2>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {featuredGuides.map(guide => (
+          <GuideCard
+            title={guide.data.title}
+            description={guide.data.description}
+            href={`/guides/${guide.slug}`}
+            category={guide.data.category}
+            readTime={guide.data.readTime}
+            featured={true}
+          />
+        ))}
+      </div>
+    </section>
+
+    <!-- ===== CATEGORY GRID ===== -->
+    <section class="py-14 border-t border-surface-700" aria-labelledby="category-heading">
+      <h2 id="category-heading" class="section-title mb-8">Browse by Category</h2>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+        {categories.map(cat => {
+          const colors = colorMap[cat.color];
+          return (
+            <a href={`/category/${cat.slug}`} class={`card group p-5 flex gap-4 items-start ${colors.card}`}>
+              <div class={`w-10 h-10 rounded-xl flex items-center justify-center text-xl flex-shrink-0 ${colors.icon}`}>
+                {cat.icon}
+              </div>
+              <div>
+                <h3 class={`font-display font-600 text-sm text-white group-hover:${colors.badge} transition-colors leading-tight`}>
+                  {cat.label}
+                </h3>
+                <p class="text-slate-500 text-xs mt-1 leading-relaxed">{cat.desc}</p>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    </section>
+
+    <!-- ===== LATEST ARTICLES ===== -->
+    <section class="py-14 border-t border-surface-700" aria-labelledby="latest-heading">
+      <div class="flex items-center justify-between mb-8">
+        <h2 id="latest-heading" class="section-title">📰 Latest Guides</h2>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {latestGuides.map(guide => (
+          <GuideCard
+            title={guide.data.title}
+            description={guide.data.description}
+            href={`/guides/${guide.slug}`}
+            category={guide.data.category}
+            readTime={guide.data.readTime}
+          />
+        ))}
+      </div>
+    </section>
+
+    <!-- ===== FAQ ===== -->
+    <section class="py-14 border-t border-surface-700" aria-labelledby="faq-heading">
+      <h2 id="faq-heading" class="section-title mb-8">❓ Frequently Asked Questions</h2>
+
+      <!-- FAQ Schema -->
+      <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": faqs.map(faq => ({
+          "@type": "Question",
+          "name": faq.q,
+          "acceptedAnswer": { "@type": "Answer", "text": faq.a }
+        }))
+      })} />
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl">
+        {faqs.map(faq => (
+          <div class="bg-surface-800 border border-surface-600 rounded-xl p-5">
+            <h3 class="font-display font-600 text-white text-sm mb-2">{faq.q}</h3>
+            <p class="text-slate-400 text-sm leading-relaxed">{faq.a}</p>
+          </div>
+        ))}
+      </div>
+      <div class="mt-6">
+        <a href="/faq" class="btn-ghost border border-surface-600">View all FAQs →</a>
+      </div>
+    </section>
+
+  </div>
+</BaseLayout>

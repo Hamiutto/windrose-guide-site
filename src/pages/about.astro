@@ -1,0 +1,54 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+---
+
+<BaseLayout
+  title="About Windrose Guides – Community Game Guide Hub"
+  description="WindroseGuides.com is a fan-made community guide hub for the game Windrose. Learn about our mission and how to contribute."
+>
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <Breadcrumb crumbs={[{ label: 'About' }]} />
+
+    <header class="mb-10">
+      <h1 class="font-display font-800 text-4xl text-white mb-4">About Windrose Guides</h1>
+      <p class="text-slate-400 text-lg leading-relaxed">
+        A community-built guide hub dedicated to helping players master Windrose — faster.
+      </p>
+    </header>
+
+    <div class="prose prose-invert prose-lg max-w-none prose-headings:font-display prose-a:text-brand-400">
+      <h2>Our Mission</h2>
+      <p>
+        WindroseGuides.com exists because we were new players once too — confused about wind mechanics, unsure which ship to build first, getting destroyed in PvP zones. We built this site so the next generation of Windrose players can skip the frustration and get straight to the fun.
+      </p>
+
+      <h2>What We Cover</h2>
+      <ul>
+        <li><strong>Beginner Guides</strong> – From your first spawn to your first proper ship</li>
+        <li><strong>Ship Builds</strong> – Every ship class, compared and explained</li>
+        <li><strong>Survival Tips</strong> – Staying alive in storms, monster encounters, and PvP zones</li>
+        <li><strong>Multiplayer</strong> – Crew up, assign roles, and dominate together</li>
+        <li><strong>Settings & FPS</strong> – Performance guides for every PC tier</li>
+        <li><strong>Resources & Crafting</strong> – Farming routes and recipe databases</li>
+      </ul>
+
+      <h2>Disclaimer</h2>
+      <p>
+        WindroseGuides.com is a fan-made site and is not affiliated with, endorsed by, or officially connected to the developers or publishers of Windrose. All game content, names, and trademarks belong to their respective owners.
+      </p>
+      <p>
+        Guide accuracy is maintained by community contributors. If you find outdated information, please reach out.
+      </p>
+    </div>
+
+    <div class="mt-10 p-6 bg-surface-800 border border-surface-600 rounded-xl">
+      <h2 class="font-display font-700 text-white text-lg mb-2">Ready to explore?</h2>
+      <p class="text-slate-400 text-sm mb-4">Start with our beginner guide if you're new, or jump straight to the category you need.</p>
+      <div class="flex flex-wrap gap-3">
+        <a href="/guides/beginner-guide" class="btn-primary">Beginner Guide</a>
+        <a href="/" class="btn-ghost border border-surface-600">All Guides</a>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

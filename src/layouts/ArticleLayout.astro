@@ -1,0 +1,175 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import Breadcrumb from '../components/Breadcrumb.astro';
+import TableOfContents from '../components/TableOfContents.astro';
+import GuideCard from '../components/GuideCard.astro';
+import { getCollection } from 'astro:content';
+
+interface Props {
+  frontmatter: {
+    title: string;
+    description: string;
+    category: string;
+    publishDate: string;
+    updatedDate?: string;
+    author: string;
+    readTime?: string;
+    tags: string[];
+  };
+  headings: { depth: number; slug: string; text: string }[];
+  slug: string;
+}
+
+const { frontmatter, headings, slug } = Astro.props;
+
+const categoryLabels: Record<string, string> = {
+  beginner: 'Beginner Guides',
+  ships: 'Ship Guides',
+  survival: 'Survival Tips',
+  multiplayer: 'Multiplayer',
+  settings: 'Settings & FPS',
+  resources: 'Resources',
+};
+
+const catLabel = categoryLabels[frontmatter.category] ?? frontmatter.category;
+
+// Related guides
+const allGuides = await getCollection('guides');
+const related = allGuides
+  .filter(g => g.slug !== slug && g.data.category === frontmatter.category)
+  .slice(0, 3);
+
+const displayDate = frontmatter.updatedDate ?? frontmatter.publishDate;
+
+// Article Schema
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": frontmatter.title,
+  "description": frontmatter.description,
+  "author": { "@type": "Organization", "name": frontmatter.author },
+  "datePublished": frontmatter.publishDate,
+  "dateModified": displayDate,
+  "publisher": {
+    "@type": "Organization",
+    "name": "Windrose Guides",
+    "url": "https://windroseguides.com"
+  }
+};
+---
+
+<BaseLayout
+  title={frontmatter.title}
+  description={frontmatter.description}
+  type="article"
+>
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} slot="head" />
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-10">
+
+      <!-- Main Content -->
+      <article>
+        <Breadcrumb crumbs={[
+          { label: catLabel, href: `/category/${frontmatter.category}` },
+          { label: frontmatter.title }
+        ]} />
+
+        <!-- Article Header -->
+        <header class="mb-8">
+          <div class="flex flex-wrap items-center gap-3 mb-4">
+            <a href={`/category/${frontmatter.category}`} class="badge bg-brand-500/10 border border-brand-500/20 text-brand-400">
+              {catLabel}
+            </a>
+            {frontmatter.readTime && (
+              <span class="text-slate-500 text-sm">{frontmatter.readTime}</span>
+            )}
+          </div>
+          <h1 class="font-display font-800 text-3xl md:text-4xl text-white leading-tight mb-4">
+            {frontmatter.title}
+          </h1>
+          <p class="text-slate-400 text-lg leading-relaxed mb-5">
+            {frontmatter.description}
+          </p>
+          <div class="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-slate-500 pb-6 border-b border-surface-700">
+            <span>By {frontmatter.author}</span>
+            <span>Updated: <time datetime={displayDate}>{new Date(displayDate).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}</time></span>
+          </div>
+        </header>
+
+        <!-- TOC (mobile) -->
+        <div class="lg:hidden">
+          <TableOfContents headings={headings} />
+        </div>
+
+        <!-- Article Body -->
+        <div class="prose prose-invert prose-lg max-w-none
+          prose-headings:font-display prose-headings:scroll-mt-24
+          prose-h2:text-2xl prose-h2:border-b prose-h2:border-surface-700 prose-h2:pb-3 prose-h2:mt-10 prose-h2:mb-5
+          prose-h3:text-lg prose-h3:mt-8 prose-h3:mb-3
+          prose-a:text-brand-400 prose-a:no-underline hover:prose-a:underline
+          prose-code:bg-surface-700 prose-code:rounded prose-code:px-1.5 prose-code:py-0.5 prose-code:text-sm
+          prose-blockquote:border-brand-500 prose-blockquote:bg-brand-500/5 prose-blockquote:rounded-r-lg prose-blockquote:py-1
+          prose-table:text-sm prose-th:bg-surface-700 prose-th:font-display prose-td:border-surface-600 prose-th:border-surface-600
+          prose-strong:text-white
+        ">
+          <slot />
+        </div>
+
+        <!-- Tags -->
+        {frontmatter.tags.length > 0 && (
+          <div class="mt-10 pt-6 border-t border-surface-700">
+            <p class="text-slate-500 text-xs uppercase tracking-wider mb-3 font-display">Tags</p>
+            <div class="flex flex-wrap gap-2">
+              {frontmatter.tags.map(tag => (
+                <span class="badge bg-surface-700 border border-surface-600 text-slate-400">{tag}</span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <!-- Related Articles -->
+        {related.length > 0 && (
+          <section class="mt-12 pt-8 border-t border-surface-700">
+            <h2 class="font-display font-700 text-xl text-white mb-5">Related Guides</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              {related.map(guide => (
+                <GuideCard
+                  title={guide.data.title}
+                  description={guide.data.description}
+                  href={`/guides/${guide.slug}`}
+                  category={guide.data.category}
+                  readTime={guide.data.readTime}
+                />
+              ))}
+            </div>
+          </section>
+        )}
+      </article>
+
+      <!-- Sidebar (desktop) -->
+      <aside class="hidden lg:block">
+        <div class="sticky top-24 space-y-5">
+          <TableOfContents headings={headings} />
+
+          <!-- Ad placeholder -->
+          <div class="bg-surface-800 border border-dashed border-surface-600 rounded-xl p-5 text-center">
+            <p class="text-slate-600 text-xs font-mono">[ Ad Unit 300×250 ]</p>
+          </div>
+
+          <!-- Quick nav -->
+          <div class="bg-surface-800 border border-surface-600 rounded-xl p-5">
+            <p class="font-display font-600 text-white text-xs uppercase tracking-wider mb-3">Quick Links</p>
+            <div class="space-y-2">
+              <a href="/guides/beginner-guide" class="block text-sm text-slate-400 hover:text-brand-400 transition-colors">→ Beginner Guide</a>
+              <a href="/guides/best-starter-ship" class="block text-sm text-slate-400 hover:text-brand-400 transition-colors">→ Best Starter Ship</a>
+              <a href="/guides/multiplayer-guide" class="block text-sm text-slate-400 hover:text-brand-400 transition-colors">→ Multiplayer Guide</a>
+              <a href="/guides/fps-boost-guide" class="block text-sm text-slate-400 hover:text-brand-400 transition-colors">→ FPS Boost Guide</a>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+  </div>
+</BaseLayout>
