@@ -4,7 +4,6 @@ description: "How to join friends, create a crew, divide ship roles, and dominat
 category: "multiplayer"
 publishDate: "2024-03-10"
 featured: true
-image: "/images/multiplayer.jpg"
 tags: ["multiplayer", "co-op", "crew", "friends", "pvp"]
 author: "Windrose Team"
 readTime: "7 min read"

@@ -22,7 +22,7 @@ const currentPath = Astro.url.pathname;
             <path d="M12 11L19 9L22 22L12 18L2 22L5 9L12 11Z" fill="white"/>
           </svg>
         </div>
-        <span class="font-display font-700 text-white text-lg leading-none">
+        <span class="font-display font-bold text-white text-lg leading-none">
           Windrose<span class="text-brand-400">Guides</span>
         </span>
       </a>
@@ -32,7 +32,7 @@ const currentPath = Astro.url.pathname;
         {navLinks.map(link => (
           <a
             href={link.href}
-            class={`px-3 py-1.5 rounded-md text-sm font-display font-500 transition-colors ${
+            class={`px-3 py-1.5 rounded-md text-sm font-display font-medium transition-colors ${
               currentPath.startsWith(link.href)
                 ? 'text-white bg-surface-700'
                 : 'text-slate-400 hover:text-white hover:bg-surface-700'

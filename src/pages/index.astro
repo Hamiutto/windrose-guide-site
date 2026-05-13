@@ -48,10 +48,10 @@ const faqs = [
 
     <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28">
       <div class="max-w-3xl">
-        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 text-xs font-display font-600 uppercase tracking-wider mb-6">
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 text-xs font-display font-semibold uppercase tracking-wider mb-6">
           ⚓ Community Guide Hub
         </div>
-        <h1 class="font-display font-800 text-4xl md:text-5xl lg:text-6xl text-white leading-tight mb-6">
+        <h1 class="font-display font-extrabold text-4xl md:text-5xl lg:text-6xl text-white leading-tight mb-6">
           Windrose<br />
           <span class="text-brand-400">Guides & Wiki</span>
         </h1>
@@ -103,7 +103,7 @@ const faqs = [
                 {cat.icon}
               </div>
               <div>
-                <h3 class={`font-display font-600 text-sm text-white group-hover:${colors.badge} transition-colors leading-tight`}>
+                <h3 class={`font-display font-semibold text-sm text-white group-hover:${colors.badge} transition-colors leading-tight`}>
                   {cat.label}
                 </h3>
                 <p class="text-slate-500 text-xs mt-1 leading-relaxed">{cat.desc}</p>
@@ -150,7 +150,7 @@ const faqs = [
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl">
         {faqs.map(faq => (
           <div class="bg-surface-800 border border-surface-600 rounded-xl p-5">
-            <h3 class="font-display font-600 text-white text-sm mb-2">{faq.q}</h3>
+            <h3 class="font-display font-semibold text-white text-sm mb-2">{faq.q}</h3>
             <p class="text-slate-400 text-sm leading-relaxed">{faq.a}</p>
           </div>
         ))}

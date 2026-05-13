@@ -5,7 +5,6 @@ category: "beginner"
 publishDate: "2024-03-01"
 updatedDate: "2024-06-01"
 featured: true
-image: "/images/beginner-guide.jpg"
 tags: ["beginner", "getting started", "tutorial", "controls"]
 author: "Windrose Team"
 readTime: "8 min read"

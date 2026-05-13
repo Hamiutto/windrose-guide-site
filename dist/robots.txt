@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://windroseguides.com/sitemap-index.xml

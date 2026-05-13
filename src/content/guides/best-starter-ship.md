@@ -5,7 +5,6 @@ category: "ships"
 publishDate: "2024-03-05"
 updatedDate: "2024-06-01"
 featured: true
-image: "/images/starter-ships.jpg"
 tags: ["ships", "sloop", "beginner", "ship builds", "best ship"]
 author: "Windrose Team"
 readTime: "6 min read"

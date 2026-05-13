@@ -60,21 +60,21 @@ const allQuestions = faqs.flatMap(s => s.questions);
     <Breadcrumb crumbs={[{ label: 'FAQ' }]} />
 
     <header class="mb-12">
-      <h1 class="font-display font-800 text-4xl text-white mb-4">Windrose FAQ</h1>
+      <h1 class="font-display font-extrabold text-4xl text-white mb-4">Windrose FAQ</h1>
       <p class="text-slate-400 text-lg">Common questions from the Windrose community, answered.</p>
     </header>
 
     <div class="space-y-12">
       {faqs.map(section => (
         <section>
-          <h2 class="font-display font-700 text-lg text-brand-400 uppercase tracking-wider mb-5 pb-3 border-b border-surface-700">
+          <h2 class="font-display font-bold text-lg text-brand-400 uppercase tracking-wider mb-5 pb-3 border-b border-surface-700">
             {section.section}
           </h2>
           <div class="space-y-4">
             {section.questions.map(item => (
               <details class="group bg-surface-800 border border-surface-600 rounded-xl overflow-hidden">
                 <summary class="flex items-center justify-between p-5 cursor-pointer list-none hover:bg-surface-700 transition-colors">
-                  <h3 class="font-display font-600 text-white text-sm pr-8">{item.q}</h3>
+                  <h3 class="font-display font-semibold text-white text-sm pr-8">{item.q}</h3>
                   <svg class="w-4 h-4 text-slate-500 flex-shrink-0 group-open:rotate-180 transition-transform" viewBox="0 0 24 24" fill="none">
                     <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                   </svg>
@@ -90,7 +90,7 @@ const allQuestions = faqs.flatMap(s => s.questions);
     </div>
 
     <div class="mt-12 p-6 bg-surface-800 border border-surface-600 rounded-xl text-center">
-      <p class="text-slate-300 font-display font-600 mb-2">Can't find your answer?</p>
+      <p class="text-slate-300 font-display font-semibold mb-2">Can't find your answer?</p>
       <p class="text-slate-500 text-sm mb-4">Check our full guide library for detailed walkthroughs.</p>
       <a href="/" class="btn-primary">Browse All Guides</a>
     </div>

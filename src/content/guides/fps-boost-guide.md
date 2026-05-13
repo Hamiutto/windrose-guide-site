@@ -5,7 +5,6 @@ category: "settings"
 publishDate: "2024-03-15"
 updatedDate: "2024-06-01"
 featured: true
-image: "/images/fps-guide.jpg"
 tags: ["fps", "settings", "performance", "optimization", "low-end pc"]
 author: "Windrose Team"
 readTime: "5 min read"
