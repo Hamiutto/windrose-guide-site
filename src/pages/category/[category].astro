@@ -58,13 +58,41 @@ const meta = categoryMeta[category as string] ?? {
 };
 
 const allGuides = await getCollection('guides');
-const guides = allGuides.filter(g => g.data.category === category);
+const guides = allGuides
+  .filter(g => g.data.category === category)
+  .sort((a, b) => {
+    const dateA = a.data.updatedDate ?? a.data.publishDate;
+    const dateB = b.data.updatedDate ?? b.data.publishDate;
+    return new Date(dateB).getTime() - new Date(dateA).getTime();
+  });
+
+const categoryCanonical = `/category/${category}`;
+const itemListSchema = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": meta.label,
+  "description": meta.description,
+  "url": `https://windroseguides.com${categoryCanonical}`,
+  "mainEntity": {
+    "@type": "ItemList",
+    "itemListElement": guides.map((guide, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "url": `https://windroseguides.com/guides/${guide.slug}`,
+      "name": guide.data.title
+    }))
+  }
+};
 ---
 
 <BaseLayout
   title={`${meta.label} – Windrose Guides`}
   description={meta.description}
+  canonical={categoryCanonical}
+  keywords={['Windrose', meta.label, 'Windrose guides', 'Windrose wiki']}
 >
+  <script type="application/ld+json" set:html={JSON.stringify(itemListSchema)} slot="head" />
+
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
     <Breadcrumb crumbs={[{ label: meta.label }]} />
 
@@ -82,17 +110,20 @@ const guides = allGuides.filter(g => g.data.category === category);
     </header>
 
     {guides.length > 0 ? (
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {guides.map(guide => (
-          <GuideCard
-            title={guide.data.title}
-            description={guide.data.description}
-            href={`/guides/${guide.slug}`}
-            category={guide.data.category}
-            readTime={guide.data.readTime}
-          />
-        ))}
-      </div>
+      <section aria-labelledby="category-guides-heading">
+        <h2 id="category-guides-heading" class="sr-only">{meta.label} articles</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {guides.map(guide => (
+            <GuideCard
+              title={guide.data.title}
+              description={guide.data.description}
+              href={`/guides/${guide.slug}`}
+              category={guide.data.category}
+              readTime={guide.data.readTime}
+            />
+          ))}
+        </div>
+      </section>
     ) : (
       <div class="text-center py-20">
         <p class="text-slate-500 text-lg">No guides yet in this category.</p>

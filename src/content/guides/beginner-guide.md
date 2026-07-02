@@ -71,7 +71,7 @@ Nights in Windrose are dangerous. Sea monsters are more active, and visibility d
 
 Once you're comfortable with basics, check out:
 - [Best Starter Ship Guide](/guides/best-starter-ship) – which ship to build first
-- [Survival Tips](/guides/survival-tips) – intermediate survival mechanics
+- [FPS Boost Guide](/guides/fps-boost-guide) – performance settings for smoother sailing
 - [How to Play Multiplayer](/guides/multiplayer-guide) – join or create a crew
 
 ## FAQ

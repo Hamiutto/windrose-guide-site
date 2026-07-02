@@ -1,0 +1,90 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
+import GuideCard from '../../components/GuideCard.astro';
+import { getCollection } from 'astro:content';
+
+const guides = (await getCollection('guides')).sort((a, b) => {
+  const dateA = a.data.updatedDate ?? a.data.publishDate;
+  const dateB = b.data.updatedDate ?? b.data.publishDate;
+  return new Date(dateB).getTime() - new Date(dateA).getTime();
+});
+
+const categories = [
+  { href: '/category/beginner', label: 'Beginner Guides' },
+  { href: '/category/ships', label: 'Ship Guides' },
+  { href: '/category/survival', label: 'Survival Tips' },
+  { href: '/category/multiplayer', label: 'Multiplayer' },
+  { href: '/category/settings', label: 'Settings & FPS' },
+  { href: '/category/resources', label: 'Resources' },
+];
+
+const guidesSchema = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  "name": "All Windrose Guides",
+  "description": "Browse all Windrose guides, tutorials, ship builds, survival tips, multiplayer help, and FPS settings.",
+  "url": "https://windroseguides.com/guides",
+  "mainEntity": {
+    "@type": "ItemList",
+    "itemListElement": guides.map((guide, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "url": `https://windroseguides.com/guides/${guide.slug}`,
+      "name": guide.data.title
+    }))
+  }
+};
+---
+
+<BaseLayout
+  title="All Windrose Guides"
+  description="Browse every Windrose guide in one place: beginner tutorials, ship builds, survival tips, multiplayer guides, settings, FPS boosts, and resources."
+  canonical="/guides"
+  keywords={['Windrose guides', 'Windrose wiki', 'Windrose tutorials', 'Windrose guide list']}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(guidesSchema)} slot="head" />
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <Breadcrumb crumbs={[{ label: 'Guides' }]} />
+
+    <header class="mb-10">
+      <h1 class="font-display font-extrabold text-3xl md:text-4xl text-white mb-4">
+        All Windrose Guides
+      </h1>
+      <p class="text-slate-400 text-lg max-w-3xl">
+        Browse every Windrose guide by category, from your first ship to performance settings and multiplayer strategy.
+      </p>
+    </header>
+
+    <section aria-labelledby="guide-categories-heading" class="mb-10">
+      <h2 id="guide-categories-heading" class="section-title mb-5">Guide Categories</h2>
+      <div class="flex flex-wrap gap-3">
+        {categories.map(category => (
+          <a href={category.href} class="btn-ghost border border-surface-600">
+            {category.label}
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section aria-labelledby="all-guides-heading">
+      <div class="flex items-center justify-between mb-5">
+        <h2 id="all-guides-heading" class="section-title">Latest Guides</h2>
+        <p class="text-slate-500 text-sm">{guides.length} guide{guides.length !== 1 ? 's' : ''}</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {guides.map(guide => (
+          <GuideCard
+            title={guide.data.title}
+            description={guide.data.description}
+            href={`/guides/${guide.slug}`}
+            category={guide.data.category}
+            readTime={guide.data.readTime}
+          />
+        ))}
+      </div>
+    </section>
+  </div>
+</BaseLayout>

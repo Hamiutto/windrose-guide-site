@@ -78,5 +78,5 @@ Once you have your Sloop, prioritize these upgrades:
 ## Related Guides
 
 - [Windrose Beginner Guide](/guides/beginner-guide)
-- [Survival Tips](/guides/survival-tips)
+- [FPS Boost Guide](/guides/fps-boost-guide)
 - [Multiplayer Guide](/guides/multiplayer-guide)

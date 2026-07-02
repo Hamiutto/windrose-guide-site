@@ -34,12 +34,33 @@ const faqs = [
   { q: 'What is the best starter ship?', a: 'The Sloop is the best ship for beginners — fast, easy to manage solo, and capable in combat.' },
   { q: 'How do I boost FPS in Windrose?', a: 'Disable Motion Blur, V-Sync, and Ambient Occlusion. Reduce Shadow Quality and Water Detail for the biggest FPS gains.' },
 ];
+
+const homeSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Windrose Guides & Wiki",
+  "description": "Beginner guides, ship builds, survival tips, multiplayer help, and FPS settings for Windrose.",
+  "url": "https://windroseguides.com/",
+  "mainEntity": {
+    "@type": "ItemList",
+    "itemListElement": latestGuides.map((guide, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "url": `https://windroseguides.com/guides/${guide.slug}`,
+      "name": guide.data.title
+    }))
+  }
+};
 ---
 
 <BaseLayout
-  title="Windrose Guides & Wiki – Beginner Guides, Ship Builds, Tips 2024"
+  title="Windrose Guides & Wiki – Beginner Guides, Ship Builds, Tips"
   description="The most complete Windrose guide hub. Beginner walkthroughs, best starter ships, survival tips, multiplayer guides, FPS boost settings, and more."
+  canonical="/"
+  keywords={['Windrose guides', 'Windrose wiki', 'Windrose beginner guide', 'Windrose ships', 'Windrose FPS settings']}
 >
+  <script type="application/ld+json" set:html={JSON.stringify(homeSchema)} slot="head" />
+
   <!-- ===== HERO ===== -->
   <section class="relative overflow-hidden">
     <!-- Background glow -->

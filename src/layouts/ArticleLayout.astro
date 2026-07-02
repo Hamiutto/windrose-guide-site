@@ -15,6 +15,7 @@ interface Props {
     author: string;
     readTime?: string;
     tags: string[];
+    image?: string;
   };
   headings: { depth: number; slug: string; text: string }[];
   slug: string;
@@ -40,6 +41,8 @@ const related = allGuides
   .slice(0, 3);
 
 const displayDate = frontmatter.updatedDate ?? frontmatter.publishDate;
+const articleCanonical = `/guides/${slug}`;
+const articleImage = frontmatter.image ?? '/favicon.svg';
 
 // Article Schema
 const articleSchema = {
@@ -47,13 +50,24 @@ const articleSchema = {
   "@type": "Article",
   "headline": frontmatter.title,
   "description": frontmatter.description,
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": `https://windroseguides.com${articleCanonical}`
+  },
+  "image": `https://windroseguides.com${articleImage}`,
   "author": { "@type": "Organization", "name": frontmatter.author },
   "datePublished": frontmatter.publishDate,
   "dateModified": displayDate,
+  "articleSection": catLabel,
+  "keywords": frontmatter.tags.join(', '),
   "publisher": {
     "@type": "Organization",
     "name": "Windrose Guides",
-    "url": "https://windroseguides.com"
+    "url": "https://windroseguides.com",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://windroseguides.com/favicon.svg"
+    }
   }
 };
 ---
@@ -61,7 +75,10 @@ const articleSchema = {
 <BaseLayout
   title={frontmatter.title}
   description={frontmatter.description}
+  image={articleImage}
+  canonical={articleCanonical}
   type="article"
+  keywords={['Windrose', catLabel, ...frontmatter.tags]}
 >
   <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} slot="head" />
 
